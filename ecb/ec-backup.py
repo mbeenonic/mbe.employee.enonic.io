@@ -97,7 +97,7 @@ for image in docker_client.containers():
         docker_compose_prefix = hostname.replace('.', '')
         container_types_re_string = '|'.join(container_types_to_backup)
         _debug("docker_compose_prefix: %s, container_types_re_string: %s" % (docker_compose_prefix, container_types_re_string))
-        p = re.compile('^' + docker_compose_prefix + '_' + container_types_re_string + '_[0-9]+$', re.IGNORECASE)
+        p = re.compile('^' + docker_compose_prefix + '_(' + container_types_re_string + ')_[0-9]+$', re.IGNORECASE)
         if p.match(container_name):
             containers_to_backup.append(container_name)
 
