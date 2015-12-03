@@ -14,6 +14,9 @@ def _error(message):
 def _info(message):
     print("[INFO] %s" % message)
 
+def _debug(message):
+    print("[DEBUG] %s" % message)
+
 def _help():
     print("HELP - TBD")
 
@@ -88,18 +91,19 @@ docker_client = docker.Client(base_url='unix://var/run/docker.sock', version="au
 
 _info("Get names of the containers to be backed up")
 containers_to_backup = []
-all_containers = []
 for image in docker_client.containers():
     for container_name in image['Names']:
-        if any(container_type in container_name for container_type in container_types_to_backup):
-            all_containers.append(container_name)
+        #if any(container_type in container_name for container_type in container_types_to_backup):
+        docker_compose_prefix = hostname.replace('.', '')
+        container_types_re_string = '|'.join(container_types_to_backup)
+        _debug("docker_compose_prefix: %s, container_types_re_string: %s" % (docker_compose_prefix, container_types_re_string))
+        p = re.compile('^' + docker_compose_prefix + '_' + container_types_re_string + '_[0-9]+$', re.IGNORECASE)
+        if p.match(container_name):
+            containers_to_backup.append(container_name)
 
-_info(all_containers)
+_info(containers_to_backup)
 
 sys.exit(0)
-
-#TBD
-containers_to_backup = all_containers
 
 for i in containers_to_backup:
     if not 'out' in locals():
