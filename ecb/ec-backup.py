@@ -52,7 +52,7 @@ if is_fqdn(hostname) == False:
 
 # clone git repo with host details
 git_server = 'https://github.com/mbeenonic/'
-repo_name = 'enonic-' + hostname
+repo_name = hostname
 repo_dirname = hostname + '.git'
 repo_address = git_server + repo_name
 
