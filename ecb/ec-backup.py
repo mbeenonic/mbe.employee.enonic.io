@@ -80,6 +80,7 @@ for (ctype, cmeta) in ecb_config.items():
     if 'labels' in cmeta.keys() and cmeta['labels']['io.enonic.backup'] == 'yes':
         container_types_to_backup.append(ctype)
 
+# TBD: change to nicer format
 _info(container_types_to_backup)
 
 _info("Connecting to host docker demon")
@@ -90,10 +91,12 @@ containers_to_backup = []
 all_containers = []
 for image in docker_client.containers():
     for container_name in image['Names']:
-         #all_containers.append({'name' : container_name})
-         all_containers.append(container_name)
+        if any(container_type in container_name for container_type in container_types_to_backup):
+            all_containers.append(container_name)
 
 _info(all_containers)
+
+sys.exit(0)
 
 #TBD
 containers_to_backup = all_containers
