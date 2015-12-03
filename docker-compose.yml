@@ -23,8 +23,5 @@ exp:
     io.enonic.prescripts: "{\"command 1\", \"command 2\", \"command 3\"}"
     io.enonic.postscripts: "{\"command 1\", \"command 2\", \"command 3\"}"
 
-ecb:
-  build: ecb
-
 storage:
   build: storage
