@@ -19,9 +19,9 @@ start_time = time.time()
 
 # check if log file exists, create if not
 if os.path.isfile(log_file) != True:
-    log = open(logfile, 'w')
+    log = open(log_file, 'w')
 else:
-    log = open(logfile, 'a')
+    log = open(log_file, 'a')
 log.write("[START] " + time.strftime("%Y-%m-%d %H:%M:%S"))
 
 def is_fqdn(hostname):
