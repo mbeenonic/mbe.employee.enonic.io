@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 ### CONFIG ###
-log_file = '/backup/backup.log'
+log_file = "/backup/backup.log"
 ### END CONFIG ###
 
 import re
@@ -19,9 +19,9 @@ start_time = time.time()
 
 # check if log file exists, create if not
 if os.path.isfile(log_file) != True:
-    log = open(log_file, 'w')
+    log = open(log_file, "w")
 else:
-    log = open(log_file, 'a')
+    log = open(log_file, "a")
 log.write("[START] " + time.strftime("%Y-%m-%d %H:%M:%S") + "\n")
 
 def is_fqdn(hostname):
@@ -56,9 +56,9 @@ if len(sys.argv) != 2:
 # get hostname from command line arguments
 hostname = sys.argv[1]
 
-_info('')
-_info('Performing remote backup on ' + hostname)
-_info('')
+_info("")
+_info(" *** Performing remote backup on " + hostname + " ***")
+_info("")
 
 # check if argument is proper FQDN
 _info("Check if argument is proper FQDN")
@@ -83,13 +83,13 @@ if is_fqdn(hostname) == False:
 # get all directories under /services
 all_services = []
 for dir_name in os.listdir("/services"):
-    if os.path.isfile('/services/' + dir_name + "/docker-compose.yml") != True:
+    if os.path.isfile("/services/" + dir_name + "/docker-compose.yml") != True:
         continue
-    all_services.append('/services/' + dir_name)
+    all_services.append("/services/" + dir_name)
 
 for dirname in all_services:
     _info("Read yaml config")
-    with open(dirname + "/docker-compose.yml", 'r') as f:
+    with open(dirname + "/docker-compose.yml", "r") as f:
         ecb_config = yaml.load(f)
         #print(yaml.dump(ecb_config))
 
@@ -116,7 +116,7 @@ for dirname in all_services:
                 if p.match(container_name[1:]):
                     containers_to_backup[container_name[1:]] = container_types_to_backup[container_type]
 
-    _info("Containers to backup: " + ', '.join(containers_to_backup.keys()))
+    _info("Containers to backup: " + ", ".join(containers_to_backup.keys()))
     #_debug(containers_to_backup)
 
     for container_name in containers_to_backup.keys():
@@ -124,20 +124,21 @@ for dirname in all_services:
         _info(" *** Staring backup of " + container_name + " ***")
         _info("")
 
-        _info("Run pre-scripts")
+        _info(" * Run pre-scripts")
         for command in containers_to_backup[container_name]['pre-scripts']:
-            _debug("docker.exec_create(container=" + container_name + ",cmd='" + command + "',stdout=True,stderr=true,tty=true)")
+            _debug("    docker.exec_create(container=" + container_name + ",cmd='" + command + "',stdout=True,stderr=true,tty=true)")
             #_debug("Container: " + container_name + "     run command: '" + command + "'")
 
-        _info("Do backup")
-        _debug("docker.exec_create(container=" + container_name + ",cmd='DO BACKUP',stdout=True,stderr=true,tty=true)")
+        _info(" * Do backup")
+        _debug("    docker.exec_create(container=" + container_name + ",cmd='DO BACKUP',stdout=True,stderr=true,tty=true)")
 
-        _info("Run post-scripts")
+        _info(" * Run post-scripts")
         for command in containers_to_backup[container_name]['post-scripts']:
-            _debug("docker.exec_create(container=" + container_name + ",cmd='" + command + "',stdout=True,stderr=true,tty=true)")
+            _debug("    docker.exec_create(container=" + container_name + ",cmd='" + command + "',stdout=True,stderr=true,tty=true)")
 
 # register end time
 end_time = time.time()
+_info("")
 _info("Script was running for " + str(end_time - start_time) + " seconds")
 
 log.write("[END] " + time.strftime("%Y-%m-%d %H:%M:%S") + "\n\n")
