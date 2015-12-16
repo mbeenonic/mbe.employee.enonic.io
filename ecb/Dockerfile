@@ -14,5 +14,6 @@ RUN wget -O /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py && python /tmp/
 RUN pip install gitpython docker-py pyyaml
 
 COPY ./ec-backup.py /bin/ec-backup.py
+RUN chmod a+x /bin/ec-backup.py
 
 ENTRYPOINT ["/bin/ec-backup.py"]
