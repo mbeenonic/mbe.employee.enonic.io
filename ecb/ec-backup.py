@@ -130,6 +130,7 @@ for dirname in all_services:
 
         _info("Run post-scripts")
         for command in containers_to_backup[container_name]['post-scripts']:
+            _debug(containers_to_backup[container_name]['post-scripts'])
             _debug("Container: " + container_name + "     command: '" + command + "'")
 
 # write log/email (?)
