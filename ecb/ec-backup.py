@@ -107,9 +107,9 @@ for dirname in all_services:
             #if any(container_type in container_name for container_type in container_types_to_backup):
             docker_compose_prefix = hostname.replace('.', '')
             container_types_re_string = '|'.join(container_types_to_backup)
-
-            _debug("docker_compose_prefix: %s, container_types_re_string: %s" % (docker_compose_prefix, container_types_re_string))
+            #_debug("docker_compose_prefix: %s, container_types_re_string: %s" % (docker_compose_prefix, container_types_re_string))
             re_string = '^' + docker_compose_prefix + '_(' + container_types_re_string + ')_[0-9]+$'
+            _debug("container_name: " + container_name)
             _debug("re_string: " + re_string)
             p = re.compile(re_string, re.IGNORECASE)
             if p.match(container_name):
