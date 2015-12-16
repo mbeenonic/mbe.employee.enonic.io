@@ -76,9 +76,10 @@ for dirname in all_services:
 
     # read YML file (docker-compose.yml)
     _info("Read yaml config")
-    with open(dirname + "/docker-compose.yml", 'r') as f:
-        ecb_config = yaml.load(f)
-    #print(yaml.dump(ecb_config))
+    if os.path.isfile(dirname + "/docker-compose.yml"):
+        with open(dirname + "/docker-compose.yml", 'r') as f:
+            ecb_config = yaml.load(f)
+            #print(yaml.dump(ecb_config))
 
     # find running containers to be backed up
     _info("Get container types to be backed up")
