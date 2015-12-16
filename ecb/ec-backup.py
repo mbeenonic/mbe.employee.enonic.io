@@ -103,7 +103,7 @@ for dirname in all_services:
     _info("Get names of the containers to be backed up")
     containers_to_backup = []
     for image in docker_client.containers():
-        for container_name in image['Names']:
+        for container_name[1:] in image['Names']:
             #if any(container_type in container_name for container_type in container_types_to_backup):
             docker_compose_prefix = hostname.replace('.', '')
             container_types_re_string = '|'.join(container_types_to_backup)
