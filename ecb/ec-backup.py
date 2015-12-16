@@ -113,35 +113,24 @@ for dirname in all_services:
     _debug('')
     _debug(containers_to_backup)
     _debug('')
-    
-    sys.exit(0)
 
-    for container_name in containers_to_backup:
+    for container_name in containers_to_backup.keys():
         _info("")
         _info("Staring backup of " + container_name)
+        _info("")
 
-
-
-        # run pre-script
-        #filename = repo_dirname + '/' + ecb_config[container_name['type']]["pre-script"]
-        #try :
-        #    _info("Copy pre-script to target container " + container_name['name'])
-        #    docker_client.put_archive(container_name['name'], "/bin", filename)
-        #except docker.errors.APIError, e:
-        #    _error(e)
+        _info("Run pre-scripts")
+        for command in containers_to_backup[container_name]['pre-scripts']:
+            _debug("Container: " + container_name + "     command: '" + command + "'")
 
         # backup
         _info("")
         _info("Do actual backup")
         _info("")
 
-        # run post-script
-        #filename = repo_dirname + '/' + ecb_config[container_name['type']]["post-script"]
-        #try :
-        #    _info("Copy post-script to target container " + container_name['name'])
-        #    docker_client.put_archive(container_name['name'], "/bin", filename)
-        #except docker.errors.APIError, e:
-        #    _error(e)
+        _info("Run post-scripts")
+        for command in containers_to_backup[container_name]['post-scripts']:
+            _debug("Container: " + container_name + "     command: '" + command + "'")
 
 # write log/email (?)
 
