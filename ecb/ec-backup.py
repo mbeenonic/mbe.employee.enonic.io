@@ -22,7 +22,7 @@ if os.path.isfile(log_file) != True:
     log = open(log_file, 'w')
 else:
     log = open(log_file, 'a')
-log.write("[START] " + time.strftime("%Y-%m-%d %H:%M:%S"))
+log.write("[START] " + time.strftime("%Y-%m-%d %H:%M:%S") + "\n")
 
 def is_fqdn(hostname):
     if len(hostname) > 255:
@@ -34,11 +34,11 @@ def is_fqdn(hostname):
 
 def _error(message):
     print("[ERROR] %s" % message)
-    log.write("[ERROR] %s" % message)
+    log.write("[ERROR] %s" % message + "\n")
 
 def _info(message):
     print("[INFO] %s" % message)
-    log.write("[INFO] %s" % message)
+    log.write("[INFO] %s" % message + "\n")
 
 def _debug(message):
     print("[DEBUG] %s" % message)
