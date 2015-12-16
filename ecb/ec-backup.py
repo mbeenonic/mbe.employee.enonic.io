@@ -68,8 +68,9 @@ if is_fqdn(hostname) == False:
 
 # get all directories under /services
 all_services = []
-for root_dir, children, root_file in os.walk("/services"):
-    all_services.append(root_dir)
+#for root_dir, children, root_file in os.walk("/services"):
+for dir_name in os.listdir("/services"):
+    all_services.append('/services/' + dir_name)
 
 for dirname in all_services:
 
