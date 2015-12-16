@@ -105,8 +105,11 @@ for dirname in all_services:
             container_types_re_string = '|'.join(container_types_to_backup)
 
             _debug("docker_compose_prefix: %s, container_types_re_string: %s" % (docker_compose_prefix, container_types_re_string))
-            p = re.compile('^' + docker_compose_prefix + '_(' + container_types_re_string + ')_[0-9]+$', re.IGNORECASE)
+            re_string = '^' + docker_compose_prefix + '_(' + container_types_re_string + ')_[0-9]+$'
+            _debug("re_string: " + re_string)
+            p = re.compile(re_string, re.IGNORECASE)
             if p.match(container_name):
+                _debug("matching against: '" + container_name + "'")
                 containers_to_backup.append(container_name)
 
     _info(containers_to_backup)

@@ -2,7 +2,6 @@ FROM ubuntu:14.04
 
 MAINTAINER Marek Bettman <mbe@enonic.com>
 
-LABEL io.enonic.compilation="20151126"
 LABEL description="Enonic Cloud Backup container"
 
 RUN apt-get update && apt-get -y upgrade && apt-get -y install apt-transport-https
