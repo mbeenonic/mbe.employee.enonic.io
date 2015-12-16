@@ -79,10 +79,12 @@ for dirname in all_services:
 
     # find running containers to be backed up
     _info("Get container types to be backed up")
-    container_types_to_backup = []
+    #container_types_to_backup = []
+    container_types_to_backup = {}
     for (ctype, cmeta) in ecb_config.items():
         if 'labels' in cmeta.keys() and cmeta['labels']['io.enonic.backup'] == 'yes':
-            container_types_to_backup.append(ctype)
+            #container_types_to_backup.append(ctype)
+            container_types_to_backup[ctype] = {'pre-scripts' : cmeta['labels']['io.enonic.prescripts'], 'post-scripts' : cmeta['labels']['io.enonic.postscripts']}
 
     _info("Container types to backup: " + ', '.join(container_types_to_backup))
 
@@ -90,18 +92,28 @@ for dirname in all_services:
     docker_client = docker.Client(base_url='unix://var/run/docker.sock', version="auto")
 
     _info("Get names of the containers to be backed up")
-    containers_to_backup = []
+    #containers_to_backup = []
+    containers_to_backup = {}
     for image in docker_client.containers():
         for container_name in image['Names']:
             docker_compose_prefix = hostname.replace('.', '')
-            container_types_re_string = '|'.join(container_types_to_backup)
-            re_string = '^' + docker_compose_prefix + '_(' + container_types_re_string + ')_[0-9]+$'
-            p = re.compile(re_string, re.IGNORECASE)
-            if p.match(container_name[1:]):
-                containers_to_backup.append(container_name[1:])
+            #container_types_re_string = '|'.join(container_types_to_backup)
+            #re_string = '^' + docker_compose_prefix + '_(' + container_types_re_string + ')_[0-9]+$'
+            for container_type in container_types_to_backup.keys():
+                re_string = '^' + docker_compose_prefix + '_' + container_type + '_[0-9]+$'
+                p = re.compile(re_string, re.IGNORECASE)
+                if p.match(container_name[1:]):
+                    containers_to_backup[container_name[1:]] = container_types_to_backup[container_type]
+            #p = re.compile(re_string, re.IGNORECASE)
+            #if p.match(container_name[1:]):
+            #    containers_to_backup.append(container_name[1:])
 
-    _info("Containers to backup: " + ', '.join(containers_to_backup))
+    _info("Containers to backup: " + ', '.join(containers_to_backup.keys()))
 
+    _debug('')
+    _debug(containers_to_backup)
+    _debug('')
+    
     sys.exit(0)
 
     for container_name in containers_to_backup:
