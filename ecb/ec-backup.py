@@ -20,12 +20,6 @@ def _debug(message):
 def _help():
     print("HELP - TBD")
 
-#print('''
-# .-----------------------.
-# |  ENONIC CLOUD BACKUP  |
-# '-----------------------'
-#''')
-
 _info("Importing modules")
 import re
 import subprocess
@@ -73,14 +67,12 @@ if is_fqdn(hostname) == False:
 # get all directories under /services
 all_services = []
 for dir_name in os.listdir("/services"):
+    if os.path.isfile('/services/' + dir_name + "/docker-compose.yml") != True:
+        continue
     all_services.append('/services/' + dir_name)
 
 for dirname in all_services:
-    if os.path.isfile(dirname + "/docker-compose.yml") != True:
-        continue
-
     _info("Read yaml config")
-
     with open(dirname + "/docker-compose.yml", 'r') as f:
         ecb_config = yaml.load(f)
         #print(yaml.dump(ecb_config))
@@ -89,15 +81,10 @@ for dirname in all_services:
     _info("Get container types to be backed up")
     container_types_to_backup = []
     for (ctype, cmeta) in ecb_config.items():
-        print(cmeta)
-        #print(cmeta.get('labels', "brak klucza"))
-        #print(cmeta['labels'])
-        #print(cmeta['labels']['io.enonic.backup'])
         if 'labels' in cmeta.keys() and cmeta['labels']['io.enonic.backup'] == 'yes':
             container_types_to_backup.append(ctype)
 
-    # TBD: change to nicer format
-    _info(container_types_to_backup)
+    _info("Container types to backup: " + ', '.join(container_types_to_backup))
 
     _info("Connecting to host docker demon")
     docker_client = docker.Client(base_url='unix://var/run/docker.sock', version="auto")
@@ -109,31 +96,27 @@ for dirname in all_services:
             docker_compose_prefix = hostname.replace('.', '')
             container_types_re_string = '|'.join(container_types_to_backup)
             re_string = '^' + docker_compose_prefix + '_(' + container_types_re_string + ')_[0-9]+$'
-            #_debug("container_name: " + container_name[1:])
-            #_debug("re_string: " + re_string)
             p = re.compile(re_string, re.IGNORECASE)
             if p.match(container_name[1:]):
-                #_debug("matching against: '" + container_name[1:] + "'")
                 containers_to_backup.append(container_name[1:])
 
-    _info("Containers to backup: " + ','.join(containers_to_backup))
+    _info("Containers to backup: " + ', '.join(containers_to_backup))
 
     sys.exit(0)
 
-    # for each container to be backed up:
-    script_path = "/bin"
-
     for container_name in containers_to_backup:
         _info("")
-        _info("Staring backup of " + container_name['name'])
+        _info("Staring backup of " + container_name)
+
+
 
         # run pre-script
-        filename = repo_dirname + '/' + ecb_config[container_name['type']]["pre-script"]
-        try :
-            _info("Copy pre-script to target container " + container_name['name'])
-            docker_client.put_archive(container_name['name'], "/bin", filename)
-        except docker.errors.APIError, e:
-            _error(e)
+        #filename = repo_dirname + '/' + ecb_config[container_name['type']]["pre-script"]
+        #try :
+        #    _info("Copy pre-script to target container " + container_name['name'])
+        #    docker_client.put_archive(container_name['name'], "/bin", filename)
+        #except docker.errors.APIError, e:
+        #    _error(e)
 
         # backup
         _info("")
@@ -141,12 +124,12 @@ for dirname in all_services:
         _info("")
 
         # run post-script
-        filename = repo_dirname + '/' + ecb_config[container_name['type']]["post-script"]
-        try :
-            _info("Copy post-script to target container " + container_name['name'])
-            docker_client.put_archive(container_name['name'], "/bin", filename)
-        except docker.errors.APIError, e:
-            _error(e)
+        #filename = repo_dirname + '/' + ecb_config[container_name['type']]["post-script"]
+        #try :
+        #    _info("Copy post-script to target container " + container_name['name'])
+        #    docker_client.put_archive(container_name['name'], "/bin", filename)
+        #except docker.errors.APIError, e:
+        #    _error(e)
 
 # write log/email (?)
 
