@@ -20,11 +20,11 @@ def _debug(message):
 def _help():
     print("HELP - TBD")
 
-print('''
- .-----------------------.
- |  ENONIC CLOUD BACKUP  |
- '-----------------------'
-''')
+#print('''
+# .-----------------------.
+# |  ENONIC CLOUD BACKUP  |
+# '-----------------------'
+#''')
 
 _info("Importing modules")
 import re
@@ -45,6 +45,10 @@ if len(sys.argv) != 2:
 
 # get hostname from command line arguments
 hostname = sys.argv[1]
+
+_info('')
+_info('Performing remote backup on ' + hostname)
+_info('')
 
 # check if argument is proper FQDN
 _info("Check if argument is proper FQDN")
@@ -68,16 +72,14 @@ if is_fqdn(hostname) == False:
 
 # get all directories under /services
 all_services = []
-#for root_dir, children, root_file in os.walk("/services"):
 for dir_name in os.listdir("/services"):
     all_services.append('/services/' + dir_name)
 
 for dirname in all_services:
-
-    # read YML file (docker-compose.yml)
-    _info("Read yaml config")
     if os.path.isfile(dirname + "/docker-compose.yml") != True:
         continue
+
+    _info("Read yaml config")
 
     with open(dirname + "/docker-compose.yml", 'r') as f:
         ecb_config = yaml.load(f)
@@ -87,7 +89,7 @@ for dirname in all_services:
     _info("Get container types to be backed up")
     container_types_to_backup = []
     for (ctype, cmeta) in ecb_config.items():
-        #print(ctype)
+        print(cmeta)
         #print(cmeta.get('labels', "brak klucza"))
         #print(cmeta['labels'])
         #print(cmeta['labels']['io.enonic.backup'])
@@ -104,28 +106,19 @@ for dirname in all_services:
     containers_to_backup = []
     for image in docker_client.containers():
         for container_name in image['Names']:
-            #if any(container_type in container_name for container_type in container_types_to_backup):
             docker_compose_prefix = hostname.replace('.', '')
             container_types_re_string = '|'.join(container_types_to_backup)
-            #_debug("docker_compose_prefix: %s, container_types_re_string: %s" % (docker_compose_prefix, container_types_re_string))
             re_string = '^' + docker_compose_prefix + '_(' + container_types_re_string + ')_[0-9]+$'
-            _debug("container_name: " + container_name[1:])
-            _debug("re_string: " + re_string)
+            #_debug("container_name: " + container_name[1:])
+            #_debug("re_string: " + re_string)
             p = re.compile(re_string, re.IGNORECASE)
             if p.match(container_name[1:]):
-                _debug("matching against: '" + container_name[1:] + "'")
+                #_debug("matching against: '" + container_name[1:] + "'")
                 containers_to_backup.append(container_name[1:])
 
-    _info(containers_to_backup)
+    _info("Containers to backup: " + ','.join(containers_to_backup))
 
     sys.exit(0)
-
-    for i in containers_to_backup:
-        if not 'out' in locals():
-            out = i['name']
-        else :
-            out = out + ', ' + i['name']
-    _info("Containers to be backed up: " + out)
 
     # for each container to be backed up:
     script_path = "/bin"
