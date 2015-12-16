@@ -18,7 +18,7 @@ import time
 start_time = time.time()
 
 # check if log file exists, create if not
-if os.isfile(log_file) != True:
+if os.path.isfile(log_file) != True:
     log = open(logfile, 'w')
 else:
     log = open(logfile, 'a')
