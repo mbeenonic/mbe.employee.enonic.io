@@ -121,22 +121,20 @@ for dirname in all_services:
 
     for container_name in containers_to_backup.keys():
         _info("")
-        _info("Staring backup of " + container_name)
+        _info(" *** Staring backup of " + container_name + " ***")
         _info("")
 
         _info("Run pre-scripts")
         for command in containers_to_backup[container_name]['pre-scripts']:
-            _debug("docker.exec_create(container=" + container_name + ",cmd=" + command + ",stdout=True,stderr=true,tty=true)")
+            _debug("docker.exec_create(container=" + container_name + ",cmd='" + command + "',stdout=True,stderr=true,tty=true)")
             #_debug("Container: " + container_name + "     run command: '" + command + "'")
 
-        # backup
-        _info("")
         _info("Do backup")
-        _info("")
+        _debug("docker.exec_create(container=" + container_name + ",cmd='DO BACKUP',stdout=True,stderr=true,tty=true)")
 
         _info("Run post-scripts")
         for command in containers_to_backup[container_name]['post-scripts']:
-            _debug("docker.exec_create(container=" + container_name + ",cmd=" + command + ",stdout=True,stderr=true,tty=true)")
+            _debug("docker.exec_create(container=" + container_name + ",cmd='" + command + "',stdout=True,stderr=true,tty=true)")
 
 # register end time
 end_time = time.time()
