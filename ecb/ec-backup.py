@@ -4,6 +4,26 @@
 log_file = '/backup/backup.log'
 ### END CONFIG ###
 
+import re
+import subprocess
+import git
+import yaml
+import sys
+import os
+import shutil
+import docker
+import time
+
+# register start time
+start_time = time.time()
+
+# check if log file exists, create if not
+if os.isfile(log_file) != True:
+    log = open(logfile, 'w')
+else:
+    log = open(logfile, 'a')
+log.write("[START] " + time.strftime("%Y-%m-%d %H:%M:%S"))
+
 def is_fqdn(hostname):
     if len(hostname) > 255:
         return False
@@ -25,27 +45,6 @@ def _debug(message):
 
 def _help():
     print("HELP - TBD")
-
-_info("Importing modules")
-import re
-import subprocess
-import git
-import yaml
-import sys
-import os
-import shutil
-import docker
-import time
-
-# register start time
-start_time = time.time()
-
-# check if log file exists, create if not
-if os.isfile(log_file) != True:
-    log = open(logfile, 'w')
-else:
-    log = open(logfile, 'a')
-log.write("[START] " + time.strftime("%Y-%m-%d %H:%M:%S"))
 
 # check for amount of arguments
 _info("Check for command line arguments")
