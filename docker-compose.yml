@@ -8,7 +8,7 @@ apache2:
     - exp
   labels:
     io.enonic.backup: "yes"
-    io.enonic.prescripts: ls -la /, ps aux
+    io.enonic.prescripts: ls -la /, ps aux, echo \"OK\", sleep 5
     io.enonic.postscripts: echo \"postscript1\", ls /srv
 
 exp:
