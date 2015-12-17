@@ -25,6 +25,3 @@ exp:
 
 storage:
   build: storage
-
-ecb:
-  build: ecb
