@@ -8,15 +8,8 @@ apache2:
     - exp
   labels:
     io.enonic.backup: "yes"
-    #io.enonic.prescripts: [\"command 1\", \"command 2\", \"command 3\"]
-    io.enonic.prescripts:
-      - command 1
-      - command 2
-      - command 3
-    io.enonic.postscripts:
-      - command 1
-      - command 2
-      - command 3
+    io.enonic.prescripts: command 1, command 2, command 3
+    io.enonic.postscripts: command 1, command 2, command 3
 
 exp:
   build: exp
@@ -27,14 +20,8 @@ exp:
     - "storage"
   labels:
     io.enonic.backup: "yes"
-    io.enonic.prescripts:
-      - command 1
-      - command 2
-      - command 3
-    io.enonic.postscripts:
-      - command 1
-      - command 2
-      - command 3
+    io.enonic.prescripts: command 1, command 2, command 3
+    io.enonic.postscripts: command 1, command 2, command 3
 
 storage:
   build: storage

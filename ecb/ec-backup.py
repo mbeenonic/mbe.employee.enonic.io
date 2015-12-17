@@ -46,12 +46,17 @@ def _debug(message):
 def _help():
     print("HELP - TBD")
 
+def _exit(exit_code=0):
+    log.write("[END] " + time.strftime("%Y-%m-%d %H:%M:%S") + "\n\n")
+    log.close()
+    sys.exit(exit_code)
+
 # check for amount of arguments
 _info("Check for command line arguments")
 if len(sys.argv) != 2:
     _error("Incorrect number of arguments: " + len(sys.argv))
     _help()
-    sys.exit(1)
+    _exit(1)
 
 # get hostname from command line arguments
 hostname = sys.argv[1]
@@ -65,7 +70,7 @@ _info("Check if argument is proper FQDN")
 if is_fqdn(hostname) == False:
     _error("Hostname contains invalid characters.")
     _help()
-    sys.exit(1)
+    _exit(1)
 
 # clone git repo with host details
 #git_server = 'https://github.com/mbeenonic/'
@@ -82,10 +87,16 @@ if is_fqdn(hostname) == False:
 
 # get all directories under /services
 all_services = []
+_info("Search for service directories")
 for dir_name in os.listdir("/services"):
     if os.path.isfile("/services/" + dir_name + "/docker-compose.yml") != True:
         continue
     all_services.append("/services/" + dir_name)
+    _info("Found service directory: " + dir_name)
+
+if len(all_services) == 0:
+    _info("No service directories containing docker-compose.yml found.")
+    _exit()
 
 for dirname in all_services:
     _info("Read yaml config")
@@ -93,14 +104,14 @@ for dirname in all_services:
         ecb_config = yaml.load(f)
         #print(yaml.dump(ecb_config))
 
-    # find running containers to be backed up
-    _info("Get container types to be backed up")
+    _info("Find container types to be backed up")
     container_types_to_backup = {}
     for (ctype, cmeta) in ecb_config.items():
         if 'labels' in cmeta.keys() and cmeta['labels']['io.enonic.backup'] == 'yes':
             container_types_to_backup[ctype] = {'pre-scripts' : cmeta['labels']['io.enonic.prescripts'], 'post-scripts' : cmeta['labels']['io.enonic.postscripts']}
-
     _info("Container types to backup: " + ', '.join(container_types_to_backup))
+    _debug(container_types_to_backup)
+    _exit()
 
     _info("Connecting to host docker demon")
     docker_client = docker.Client(base_url='unix://var/run/docker.sock', version="auto")
@@ -115,7 +126,6 @@ for dirname in all_services:
                 p = re.compile(re_string, re.IGNORECASE)
                 if p.match(container_name[1:]):
                     containers_to_backup[container_name[1:]] = container_types_to_backup[container_type]
-
     _info("Containers to backup: " + ", ".join(containers_to_backup.keys()))
     #_debug(containers_to_backup)
 
@@ -126,20 +136,19 @@ for dirname in all_services:
 
         _info(" * Run pre-scripts")
         for command in containers_to_backup[container_name]['pre-scripts']:
-            _debug("    docker.exec_create(container=" + container_name + ",cmd='" + command + "',stdout=True,stderr=true,tty=true)")
+            _debug("    docker.exec_create(container=" + container_name + ",cmd='" + command + "',stdout=True,stderr=True,tty=True)")
             #_debug("Container: " + container_name + "     run command: '" + command + "'")
 
         _info(" * Do backup")
-        _debug("    docker.exec_create(container=" + container_name + ",cmd='DO BACKUP',stdout=True,stderr=true,tty=true)")
+        _debug("    docker.exec_create(container=" + container_name + ",cmd='DO BACKUP',stdout=True,stderr=True,tty=True)")
 
         _info(" * Run post-scripts")
         for command in containers_to_backup[container_name]['post-scripts']:
-            _debug("    docker.exec_create(container=" + container_name + ",cmd='" + command + "',stdout=True,stderr=true,tty=true)")
+            _debug("    docker.exec_create(container=" + container_name + ",cmd='" + command + "',stdout=True,stderr=True,tty=True)")
 
 # register end time
 end_time = time.time()
 _info("")
 _info("Script was running for " + str(end_time - start_time) + " seconds")
 
-log.write("[END] " + time.strftime("%Y-%m-%d %H:%M:%S") + "\n\n")
-log.close()
+_exit()
