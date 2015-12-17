@@ -8,8 +8,8 @@ apache2:
     - exp
   labels:
     io.enonic.backup: "yes"
-    io.enonic.prescripts: ls -la /, ps aux, echo \"OK\", sleep 5
-    io.enonic.postscripts: echo \"postscript1\", ls /srv
+    io.enonic.prescripts: ls -la /, ps aux, echo "OK", sleep 5
+    io.enonic.postscripts: uname -a, users
 
 exp:
   build: exp
@@ -20,8 +20,8 @@ exp:
     - "storage"
   labels:
     io.enonic.backup: "yes"
-    io.enonic.prescripts: command 1, command 2, command 3
-    io.enonic.postscripts: command 1, command 2, command 3
+    io.enonic.prescripts: ls -la /home, free, sleep 2
+    io.enonic.postscripts: echo "postscript1", ls -la /srv
 
 storage:
   build: storage
