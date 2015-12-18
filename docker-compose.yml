@@ -6,10 +6,6 @@ apache2:
     - "80:80"
   links:
     - exp
-  labels:
-    io.enonic.backup: "yes"
-    io.enonic.prescripts: ls -la /, ps aux, echo "OK", sleep 5
-    io.enonic.postscripts: uname -a, users
 
 exp:
   build: exp
@@ -20,8 +16,8 @@ exp:
     - "storage"
   labels:
     io.enonic.backup: "yes"
-    io.enonic.prescripts: ls -la /home, free, sleep 2
-    io.enonic.postscripts: echo "postscript1", ls -la /srv
+    io.enonic.prescripts: ls -ls /home
+    io.enonic.postscripts: exit 0, exit 1
 
 storage:
   build: storage
