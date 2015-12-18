@@ -16,7 +16,7 @@ exp:
     - "storage"
   labels:
     io.enonic.backup: "yes"
-    io.enonic.prescripts: ls -ls /home
+    io.enonic.prescripts: ls -ls /home, ls -la /qweqwe, nano
     io.enonic.postscripts: /enonic-xp/exit_0, /enonic-xp/exit_123
 
 storage:
