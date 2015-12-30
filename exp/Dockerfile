@@ -10,6 +10,7 @@ RUN cp -r $XP_ROOT/home.org $XP_ROOT/home
 COPY deploy/* $XP_ROOT/home/deploy/
 
 COPY scripts/* /usr/local/bin/
+RUN chmod +x /usr/local/bin/exp*
 
 # automatic download superhero module from repo.enonic.net
 ENV SUPERHERO_VERSION 1.1.0
