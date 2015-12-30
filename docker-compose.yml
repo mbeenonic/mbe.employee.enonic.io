@@ -16,7 +16,7 @@ exp:
     - "storage"
   labels:
     io.enonic.backup: "yes"
-    io.enonic.prescripts: /usr/local/bin/exp-snapshot.sh
+    io.enonic.prescripts: /usr/local/bin/exp-snapshot_6.2.sh
     io.enonic.postscripts: 
 
 storage:
