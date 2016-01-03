@@ -16,8 +16,8 @@ if [ -z "$XP_INSTALL" ]; then
     exit 1
 fi
 
-if [ -f $XP_INSTALL/toolbox/toolbox.sh ]; then
-    _error '$XP_INSTALL/toolbox/toolbox.sh does not exist'
+if [ -f ${XP_INSTALL}/toolbox/toolbox.sh ]; then
+    _error "$XP_INSTALL/toolbox/toolbox.sh does not exist"
 fi
 
 /bin/bash $XP_INSTALL/toolbox/toolbox.sh -a ${ADMIN_USER}:${ADMIN_USER} -r cms-repo
