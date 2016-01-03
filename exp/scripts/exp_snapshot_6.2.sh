@@ -21,5 +21,8 @@ if [ -f ${XP_INSTALL}/toolbox/toolbox.sh ]; then
     exit 1
 fi
 
-/bin/bash $XP_INSTALL/toolbox/toolbox.sh -a ${ADMIN_USER}:${ADMIN_USER} -r cms-repo
-/bin/bash $XP_INSTALL/toolbox/toolbox.sh -a ${ADMIN_USER}:${ADMIN_USER} -r system-repo
+out=$(ls -la $XP_INSTALL)
+_info "$out"
+
+$XP_INSTALL/toolbox/toolbox.sh -a ${ADMIN_USER}:${ADMIN_USER} -r cms-repo
+$XP_INSTALL/toolbox/toolbox.sh -a ${ADMIN_USER}:${ADMIN_USER} -r system-repo
