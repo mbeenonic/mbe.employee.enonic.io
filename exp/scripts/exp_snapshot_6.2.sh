@@ -1,7 +1,7 @@
 #!/bin/bash
 
-ADMIN_USER=$2
-ADMIN_PASSWORD=$3
+ADMIN_USER=$1
+ADMIN_PASSWORD=$2
 
 function _error {
 	echo -e "[ERROR] $1\n"
@@ -23,4 +23,7 @@ if [ ! -f ${XP_INSTALL}/toolbox/toolbox.sh ]; then
 fi
 
 _info "$XP_INSTALL/toolbox/toolbox.sh -a ${ADMIN_USER}:${ADMIN_PASSWORD} -r cms-repo"
+$XP_INSTALL/toolbox/toolbox.sh -a ${ADMIN_USER}:${ADMIN_PASSWORD} -r cms-repo
+
 _info "$XP_INSTALL/toolbox/toolbox.sh -a ${ADMIN_USER}:${ADMIN_PASSWORD} -r system-repo"
+$XP_INSTALL/toolbox/toolbox.sh -a ${ADMIN_USER}:${ADMIN_PASSWORD} -r system-repo

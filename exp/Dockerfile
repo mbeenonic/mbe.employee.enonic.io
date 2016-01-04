@@ -9,9 +9,6 @@ RUN cp -r $XP_ROOT/home.org $XP_ROOT/home
 # Getting Enonic XP applications from deploy folder
 COPY deploy/* $XP_ROOT/home/deploy/
 
-COPY scripts/* /usr/local/bin/
-RUN chmod +x /usr/local/bin/exp*
-
 # automatic download superhero module from repo.enonic.net
 ENV SUPERHERO_VERSION 1.1.0
 RUN wget -O $XP_ROOT/home/deploy/superhero-$SUPERHERO_VERSION.jar http://repo.enonic.com/public/com/enonic/theme/superhero/$SUPERHERO_VERSION/superhero-$SUPERHERO_VERSION.jar
@@ -22,5 +19,8 @@ RUN mkdir $XP_ROOT/home/repo
 RUN chown enonic-xp -R $XP_ROOT/home
 
 ENV XP_INSTALL $XP_ROOT
+
+COPY scripts/* /usr/local/bin/
+RUN chmod +x /usr/local/bin/exp*
 
 USER enonic-xp
