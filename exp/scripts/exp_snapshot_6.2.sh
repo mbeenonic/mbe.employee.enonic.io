@@ -16,13 +16,11 @@ if [ -z "$XP_INSTALL" ]; then
     exit 1
 fi
 
-if [ -f ${XP_INSTALL}/toolbox/toolbox.sh ]; then
+if [ ! -f ${XP_INSTALL}/toolbox/toolbox.sh ]; then
     _error "$XP_INSTALL/toolbox/toolbox.sh does not exist"
+    _info $(ls -la $XP_INSTALL)
     exit 1
 fi
 
-out=$(ls -la $XP_INSTALL)
-_info "$out"
-
-$XP_INSTALL/toolbox/toolbox.sh -a ${ADMIN_USER}:${ADMIN_USER} -r cms-repo
-$XP_INSTALL/toolbox/toolbox.sh -a ${ADMIN_USER}:${ADMIN_USER} -r system-repo
+_info "$XP_INSTALL/toolbox/toolbox.sh -a ${ADMIN_USER}:${ADMIN_PASSWORD} -r cms-repo"
+_info "$XP_INSTALL/toolbox/toolbox.sh -a ${ADMIN_USER}:${ADMIN_PASSWORD} -r system-repo"
