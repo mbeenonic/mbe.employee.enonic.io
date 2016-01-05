@@ -8,6 +8,7 @@ ADMIN_USER=$1
 ADMIN_PASSWORD=$2
 SNAPSHOT_LOCATION=${XP_INSTALL}/home/data/snapshot
 BACKUP_FILE=/tmp/backup.tar.gz
+BACKUP_DIR=/tmp/backup
 
 #############
 # FUNCTIONS #
@@ -44,12 +45,21 @@ $XP_INSTALL/toolbox/toolbox.sh snapshot -a ${ADMIN_USER}:${ADMIN_PASSWORD} -r sy
 
 _info $(ls -la ${XP_INSTALL}/home/data/snapshot)
 
-if [ -f $BACKUP_FILE ]; then
-    _info "Found old version of $BACKUP_FILE - removing"
-    rm $BACKUP_FILE
+#if [ -f $BACKUP_FILE ]; then
+#    _info "Found old version of $BACKUP_FILE - removing"
+#    rm $BACKUP_FILE
+#fi
+#tar cpfz $BACKUP_FILE $SNAPSHOT_LOCATION &> /dev/null
+
+
+if [ -d $BACKUP_DIR ]; then
+    _info "Found old version of $BACKUP_DIR - removing"
+    rm -Rf $BACKUP_DIR
 fi
 
-tar cpfz $BACKUP_FILE $SNAPSHOT_LOCATION &> /dev/null
+mkdir /tmp/backup
+cp -pRv $SNAPSHOT_LOCATION 
+# + copy blobs
 
 if [ -f $BACKUP_FILE ]; then
     _info "$BACKUP_FILE generated successfully"
