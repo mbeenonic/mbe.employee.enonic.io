@@ -7,9 +7,8 @@
 ADMIN_USER=$1
 ADMIN_PASSWORD=$2
 SNAPSHOT_LOCATION=${XP_INSTALL}/home/data/snapshot
-BLOBS_LOCATION=${XP_INSTALL}/home/XXX
-BACKUP_FILE=/tmp/backup.tar
-BACKUP_DIR=/tmp/backup
+BLOBS_LOCATION=${XP_INSTALL}/home/repo/blob
+BACKUP_FILE=/tmp/backup.tar.gz
 
 #############
 # FUNCTIONS #
@@ -20,7 +19,7 @@ function _error {
 }
 
 function _info {
-	echo "$1"
+	echo "[INFO] $1"
 }
 
 ########
@@ -38,20 +37,23 @@ if [ ! -f ${XP_INSTALL}/toolbox/toolbox.sh ]; then
     exit 1
 fi
 
-_info "$XP_INSTALL/toolbox/toolbox.sh snapshot -a ${ADMIN_USER}:${ADMIN_PASSWORD} -r cms-repo"
+_info "Running $XP_INSTALL/toolbox/toolbox.sh snapshot -a ${ADMIN_USER}:${ADMIN_PASSWORD} -r cms-repo"
 $XP_INSTALL/toolbox/toolbox.sh snapshot -a ${ADMIN_USER}:${ADMIN_PASSWORD} -r cms-repo
 
-_info "$XP_INSTALL/toolbox/toolbox.sh snapshot -a ${ADMIN_USER}:${ADMIN_PASSWORD} -r system-repo"
+_info "Running $XP_INSTALL/toolbox/toolbox.sh snapshot -a ${ADMIN_USER}:${ADMIN_PASSWORD} -r system-repo"
 $XP_INSTALL/toolbox/toolbox.sh snapshot -a ${ADMIN_USER}:${ADMIN_PASSWORD} -r system-repo
 
-_info $(ls -la ${XP_INSTALL}/home/data/snapshot)
 
 if [ -f $BACKUP_FILE ]; then
     _info "Found old version of $BACKUP_FILE - removing"
     rm $BACKUP_FILE
 fi
 
-tar cpf $BACKUP_FILE $SNAPSHOT_LOCATION &> /dev/null
+tar cpfz $BACKUP_FILE $SNAPSHOT_LOCATION $BLOBS_LOCATION &> /dev/null
+
+if [ -f $BACKUP_FILE ]; then
+    _info "$BACKUP_FILE generated successfully"
+fi
 
 #if [ -d $BACKUP_DIR ]; then
 #    _info "Found old version of $BACKUP_DIR - removing"
@@ -65,11 +67,7 @@ tar cpf $BACKUP_FILE $SNAPSHOT_LOCATION &> /dev/null
 #cp -pR $SNAPSHOT_LOCATION $BACKUP_DIR
 
 #_info "Copy blobs: $BLOBS_LOCATION -> $BACKUP_DIR"
-# + copy blobs
-
-if [ -f $BACKUP_FILE ]; then
-    _info "$BACKUP_FILE generated successfully"
-fi
+#cp -pR $BLOBS_LOCATION_LOCATION $BACKUP_DIR
 
 #if [ -d $BACKUP_DIR ]; then
 #    _info "$BACKUP_DIR generated successfully"
