@@ -58,7 +58,7 @@ if [ -d $BACKUP_DIR ]; then
 fi
 
 mkdir /tmp/backup
-cp -pRv $SNAPSHOT_LOCATION 
+cp -pRv $SNAPSHOT_LOCATION $BACKUP_DIR
 # + copy blobs
 
 if [ -f $BACKUP_FILE ]; then
