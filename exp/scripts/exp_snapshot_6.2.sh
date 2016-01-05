@@ -54,21 +54,3 @@ tar cpfz $BACKUP_FILE $SNAPSHOT_LOCATION $BLOBS_LOCATION &> /dev/null
 if [ -f $BACKUP_FILE ]; then
     _info "$BACKUP_FILE generated successfully"
 fi
-
-#if [ -d $BACKUP_DIR ]; then
-#    _info "Found old version of $BACKUP_DIR - removing"
-#    rm -Rf $BACKUP_DIR
-#fi
-
-#_info "Creating backup directory - $BACKUP_DIR"
-#mkdir /tmp/backup
-
-#_info "Copy Elasticsearch indices snapshots: $SNAPSHOT_LOCATION -> $BACKUP_DIR"
-#cp -pR $SNAPSHOT_LOCATION $BACKUP_DIR
-
-#_info "Copy blobs: $BLOBS_LOCATION -> $BACKUP_DIR"
-#cp -pR $BLOBS_LOCATION_LOCATION $BACKUP_DIR
-
-#if [ -d $BACKUP_DIR ]; then
-#    _info "$BACKUP_DIR generated successfully"
-#fi
