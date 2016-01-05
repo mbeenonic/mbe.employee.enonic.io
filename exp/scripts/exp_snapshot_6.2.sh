@@ -19,7 +19,7 @@ function _error {
 }
 
 function _info {
-	echo "[INFO] $1"
+	echo "$1"
 }
 
 ########
