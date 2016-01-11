@@ -18,7 +18,7 @@ exp:
     io.enonic.backup.enable: "yes"
     io.enonic.backup.prescripts: /usr/local/bin/exp_snapshot_6.2.sh $user$ $password$
     io.enonic.backup.postscripts:
-    io.enonic.backup.data: /tmp/backup, /enonic-xp/backup
+    io.enonic.backup.data: /enonic-xp/home/data/snapshot, /enonic-xp/home/repo/blob
 
 storage:
   build: storage
