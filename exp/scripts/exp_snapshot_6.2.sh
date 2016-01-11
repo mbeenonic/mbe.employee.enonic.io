@@ -61,7 +61,7 @@ _info "Copying $SNAPSHOT_LOCATION to $BACKUP_DIR"
 cp -pR $SNAPSHOT_LOCATION $BACKUP_DIR &> /dev/null
 
 _info "Copying $BLOBS_LOCATION to $BACKUP_DIR"
-cp -pR $BLOBS_LOCATION $BACKUP_DIR &> /dev/null
+cp -pR ${BLOBS_LOCATION}/* $BACKUP_DIR &> /dev/null
 
 #if [ -f $BACKUP_FILE ]; then
 #    _info "$BACKUP_FILE generated successfully"
