@@ -15,9 +15,10 @@ exp:
   volumes_from:
     - "storage"
   labels:
-    io.enonic.backup: "yes"
-    io.enonic.prescripts: /usr/local/bin/exp_snapshot_6.2.sh $user$ $password$
-    io.enonic.postscripts: 
+    io.enonic.backup.enable: "yes"
+    io.enonic.backup.prescripts: /usr/local/bin/exp_snapshot_6.2.sh $user$ $password$
+    io.enonic.backup.postscripts:
+    io.enonic.backup.data: /tmp/backup, /root
 
 storage:
   build: storage

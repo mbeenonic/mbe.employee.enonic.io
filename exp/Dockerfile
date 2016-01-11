@@ -18,8 +18,6 @@ COPY config/* $XP_ROOT/home/config/
 RUN mkdir $XP_ROOT/home/repo
 RUN chown enonic-xp -R $XP_ROOT/home
 
-ENV XP_INSTALL $XP_ROOT
-
 COPY scripts/* /usr/local/bin/
 RUN chmod +x /usr/local/bin/exp*
 
